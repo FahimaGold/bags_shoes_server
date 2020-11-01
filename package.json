@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node .",
     "tsc": "tsc",
-    "dev": "npx ts-node src/server.ts",
+    "dev": "npx ts-node-dev src/server.ts",
     "prod": "tsc && node ./www/server.js",
     "clean": "rd /s /q www/>nul 2>&1|echo.>nul",
     "build": "npm run clean && tsc && cp -rf src/config www/config && cp .npmrc www/.npmrc && cp package.json www/package.json && cd www && zip -r Archive.zip . && cd ..",
