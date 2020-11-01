@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node .",
     "tsc": "tsc",
-    "dev": "ts-node-dev --respawn --transpile-only ./src/server.ts",
+    "dev": "npx ts-node src/server.ts",
     "prod": "tsc && node ./www/server.js",
     "clean": "rd /s /q www/>nul 2>&1|echo.>nul",
     "build": "npm run clean && tsc && cp -rf src/config www/config && cp .npmrc www/.npmrc && cp package.json www/package.json && cd www && zip -r Archive.zip . && cd ..",
@@ -27,7 +27,7 @@
     "pg": "^7.11.0",
     "reflect-metadata": "^0.1.13",
     "sequelize": "^5.3.5",
-    "sequelize-typescript": "^0.6.9"
+    "sequelize-typescript": "^1.1.0"
   },
   "devDependencies": {
     "@types/bluebird": "^3.5.27",
@@ -40,6 +40,6 @@
     "mocha": "^6.1.4",
     "ts-node-dev": "^1.0.0-pre.40",
     "tslint": "^5.18.0",
-    "typescript": "^3.5.3"
+    "typescript": "^4.0.5"
   }
 }

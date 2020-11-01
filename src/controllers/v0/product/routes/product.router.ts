@@ -7,7 +7,7 @@ const router: Router = Router();
 
 router.get('/', async(req: Request, res: Response)=>  {
     const items = await Product.findAndCountAll({order: [['id','DESC']]});
-    items.row.map((item) => {
+    items.rows.map((item) => {
         if(item.imgUrl){
             //Getting the product Url
         }

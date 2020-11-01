@@ -1,0 +1,26 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es6",
+        "moduleResolution": "node",
+        "rootDir": "./src",
+        "outDir": "./dist",
+        "lib": [
+            "es2015",
+            "es2016",
+            "dom"
+        ],
+        "declaration": true,
+        "experimentalDecorators": true,
+        "esModuleInterop": true
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules/**/*",
+        "src/**/*.test.tsx",
+        "src/**/*.story.tsx",
+        "test/**/*"
+    ]
+}
