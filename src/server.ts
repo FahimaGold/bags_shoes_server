@@ -9,7 +9,7 @@ import { V0MODELS } from './controllers/v0/model.index';
 
 
 (async () => {
-  console.log('hi there ::::')
+ 
 
   try {
     await sequelize.authenticate();
@@ -22,6 +22,7 @@ import { V0MODELS } from './controllers/v0/model.index';
   await sequelize.sync();
 
   const app = express();
+  app.use(express.static('./src/uploads/'));
   const port =  8100; // default port to listen
   
   app.use(bodyParser.json());

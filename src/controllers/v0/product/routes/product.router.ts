@@ -12,8 +12,8 @@ router.get('/', async(req: Request, res: Response)=>  {
             //Getting the product Url
         }
     });
-    res.status(400)
-    .send(items);
+    res.status(200)
+    .send(items.rows);
 })
 
 export const ProductRouter: Router = router;
