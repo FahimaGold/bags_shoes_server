@@ -92,10 +92,7 @@ router.post('/login', async (req: Request, res: Response) => {
 //register a new user
 router.post('/', async (req: Request, res: Response) => {
     let {email, firstname, surname, number, password} = req.body;
-    //const email = req.body.email;
-   // const plainTextPassword = req.body.password;
-    //console.log('Email ' + email);
-    // check email is valid
+    
     
     if (!email.trim() || !EmailValidator.validate(email.trim())) {
         return res.status(400).send({ token: "", error: "Email is required or malformed" });
