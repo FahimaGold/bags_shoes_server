@@ -1,32 +1,24 @@
-import {Table, Column, Model, HasMany, PrimaryKey, CreatedAt, UpdatedAt} from 'sequelize-typescript';
+import {Table, Column, Model, HasMany, PrimaryKey, CreatedAt, UpdatedAt, DataType} from 'sequelize-typescript';
 
 @Table
 export class User extends Model<User> {
   
   @PrimaryKey
-  @Column
+  @Column(DataType.STRING)
   public email!: string;
 
 
-  @Column
+  @Column(DataType.STRING)
   public firstname!: string; 
 
-  @Column
+  @Column(DataType.STRING)
   public surname!: string; 
 
-  @Column
-  public phone!: string; 
+  @Column(DataType.STRING)
+  public number!: string; 
 
-  @Column
+  @Column(DataType.STRING)
   public password_hash!: string; // for nullable fields
-
-  @Column
-  @CreatedAt
-  public createdAt: Date = new Date();
-
-  @Column
-  @UpdatedAt
-  public updatedAt: Date = new Date();
 
   short() {
     return {

@@ -9,11 +9,11 @@ export const config = {
   "prod": {
     "username": "",
     "password": "",
-    "database": "udagram_prod",
+    "database": "bags_shoes",
     "host": "",
     "dialect": "postgres"
   },
   "jwt":{
-    "secret":""+process.env.JWT
+    "secret": process.env.JWT
   }
 }

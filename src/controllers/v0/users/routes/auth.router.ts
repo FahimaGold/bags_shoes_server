@@ -5,10 +5,11 @@ import {config} from '../../../../config/config';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 import { NextFunction } from 'connect';
-
 import * as EmailValidator from 'email-validator';
 
+
 const router: Router = Router();
+
 
 async function generatePassword(plainTextPassword: string): Promise<string> {
     //Generating Salted Hashed Passwords
@@ -25,7 +26,7 @@ async function comparePasswords(plainTextPassword: string, hash: string): Promis
 }
 
 function generateJWT(user: User): string {
-    return jwt.sign(user, config.jwt.secret);
+    return jwt.sign(user.toJSON(), config.jwt.secret);
 }
 
 export function requireAuth(req: Request, res: Response, next: NextFunction) {
@@ -78,40 +79,47 @@ router.post('/login', async (req: Request, res: Response) => {
     const authValid = await comparePasswords(password, user.password_hash)
 
     if(!authValid) {
-        return res.status(401).send({ auth: false, message: 'Unauthorized' });
+        return res.status(401).send({ token: false, message: 'Unauthorized' });
     }
 
     // Generate JWT
     const jwt = generateJWT(user);
 
     res.status(200).send({ auth: true, token: jwt, user: user.short()});
+    //res.status(401).send({ token: false, message: 'Unauthorized' });
 });
 
 //register a new user
 router.post('/', async (req: Request, res: Response) => {
-    const email = req.body.email;
-    const plainTextPassword = req.body.password;
+    let {email, firstname, surname, number, password} = req.body;
+    //const email = req.body.email;
+   // const plainTextPassword = req.body.password;
+    //console.log('Email ' + email);
     // check email is valid
-    if (!email || !EmailValidator.validate(email)) {
-        return res.status(400).send({ auth: false, message: 'Email is required or malformed' });
+    
+    if (!email.trim() || !EmailValidator.validate(email.trim())) {
+        return res.status(400).send({ token: "", error: "Email is required or malformed" });
     }
-
+    console.log('pwd ' + password);
     // check email password valid
-    if (!plainTextPassword) {
-        return res.status(400).send({ auth: false, message: 'Password is required' });
+    if (!password) {
+        return res.status(400).send({ token: "", error: "Password is required" });
     }
 
-    // find the user
-    const user = await User.findByPk(email);
+    // Checking if user already exists
+    const user = await User.findByPk(email.trim());
     // check that user doesnt exists
     if(user) {
-        return res.status(422).send({ auth: false, message: 'User may already exist' });
+        return res.status(422).send({ token: "", error: "User may already exist" });
     }
 
-    const password_hash = await generatePassword(plainTextPassword);
+    const password_hash = await generatePassword(password.trim());
 
     const newUser = await new User({
-        email: email,
+        email: email.trim(),
+        firstname: firstname,
+        surname: surname,
+        number: number,
         password_hash: password_hash
     });
 
@@ -124,12 +132,12 @@ router.post('/', async (req: Request, res: Response) => {
 
     // Generate JWT
     const jwt = generateJWT(savedUser);
-
-    res.status(201).send({token: jwt, user: savedUser.short()});
+    console.log("TOKEN " + jwt);
+    res.status(201).send({token: jwt, error: ""});
 });
 
 router.get('/', async (req: Request, res: Response) => {
-    res.send('auth')
+    res.send('Auth')
 });
 
 export const AuthRouter: Router = router;

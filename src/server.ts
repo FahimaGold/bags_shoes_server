@@ -2,6 +2,7 @@ import express from 'express';
 import { sequelize } from './sequelize';
 
 import { IndexRouter } from './controllers/v0/index.router';
+import { UserRouter } from './controllers/v0/users/routes/user.router';
 
 import bodyParser from 'body-parser';
 
@@ -10,7 +11,7 @@ import { V0MODELS } from './controllers/v0/model.index';
 
 (async () => {
  
-
+//Connecting to db
   try {
     await sequelize.authenticate();
     console.log('connection established');
@@ -23,19 +24,21 @@ import { V0MODELS } from './controllers/v0/model.index';
 
   const app = express();
   app.use(express.static('./src/uploads/'));
+  
   const port =  8100; // default port to listen
   
   app.use(bodyParser.json());
-
+  app.use(bodyParser.urlencoded());
+ 
   
   app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "http://localhost:8100");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
     next();
   });
-
+  
   app.use('/api/v0/', IndexRouter);
-
+  app.use('/user', UserRouter);
   // Root URI call
   app.get( "/", async ( req, res ) => {
     res.send( "/api/v0/" );
