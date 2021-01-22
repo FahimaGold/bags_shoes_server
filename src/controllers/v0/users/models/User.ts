@@ -1,12 +1,13 @@
-import {Table, Column, Model, HasMany, PrimaryKey, CreatedAt, UpdatedAt, DataType} from 'sequelize-typescript';
+import {Table, Column, Model, HasMany, PrimaryKey, CreatedAt, UpdatedAt, DataType, BelongsToMany, AutoIncrement} from 'sequelize-typescript';
+
+import {Product} from '../../product/models/Product'; 
+import {Cart} from '../../cart/models/Cart'; 
 
 @Table
 export class User extends Model<User> {
   
-  @PrimaryKey
   @Column(DataType.STRING)
   public email!: string;
-
 
   @Column(DataType.STRING)
   public firstname!: string; 
@@ -18,7 +19,10 @@ export class User extends Model<User> {
   public number!: string; 
 
   @Column(DataType.STRING)
-  public password_hash!: string; // for nullable fields
+  public password_hash!: string; 
+
+  @BelongsToMany(() => Product, () => Cart)
+    products: Product[];
 
   short() {
     return {

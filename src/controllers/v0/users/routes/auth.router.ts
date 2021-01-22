@@ -59,34 +59,37 @@ router.get('/verification',
 router.post('/login', async (req: Request, res: Response) => {
     const email = req.body.email;
     const password = req.body.password;
+
+
     // check email is valid
     if (!email || !EmailValidator.validate(email)) {
-        return res.status(400).send({ auth: false, message: 'Email is required or malformed' });
+        return res.status(400).send({userId: 0, token: "", error: 'Email is required or malformed' });
     }
 
     // check email password valid
     if (!password) {
-        return res.status(400).send({ auth: false, message: 'Password is required' });
+        return res.status(400).send({userId: 0, token: "", error: 'Password is required' });
     }
 
-    const user = await User.findByPk(email);
+   // const user = await User.findByPk(email);
+   const user = await User.findOne({where: { email: email.trim() }});
     // check that user exists
     if(!user) {
-        return res.status(401).send({ auth: false, message: 'Unauthorized' });
+        return res.status(401).send({userId: 0, token: "", error: 'User does not exist' });
     }
 
     // check that the password matches
-    const authValid = await comparePasswords(password, user.password_hash)
+    const authValid = await comparePasswords(password, user.password_hash);
 
     if(!authValid) {
-        return res.status(401).send({ token: false, message: 'Unauthorized' });
+        return res.status(401).send({userId: 0, token: "", error: 'Wrong password' });
     }
 
     // Generate JWT
     const jwt = generateJWT(user);
-
-    res.status(200).send({ auth: true, token: jwt, user: user.short()});
-    //res.status(401).send({ token: false, message: 'Unauthorized' });
+    const LoggedInUser = await User.findOne({where: { email: email.trim() }});
+    res.status(200).send({userId: LoggedInUser.id, token: jwt, error:""});
+    console.log("User id is " + LoggedInUser.id);
 });
 
 //register a new user
@@ -95,19 +98,20 @@ router.post('/', async (req: Request, res: Response) => {
     
     
     if (!email.trim() || !EmailValidator.validate(email.trim())) {
-        return res.status(400).send({ token: "", error: "Email is required or malformed" });
+        return res.status(400).send({userId: 0, token: "", error: "Email is required or malformed" });
     }
     console.log('pwd ' + password);
     // check email password valid
     if (!password) {
-        return res.status(400).send({ token: "", error: "Password is required" });
+        return res.status(400).send({userId: 0, token: "", error: "Password is required" });
     }
 
     // Checking if user already exists
-    const user = await User.findByPk(email.trim());
+    //const user = await User.findByPk(email.trim());
+    const user = await User.findOne({where: { email: email.trim() }});
     // check that user doesnt exists
     if(user) {
-        return res.status(422).send({ token: "", error: "User may already exist" });
+        return res.status(422).send({userId: 0, token: "", error: "User may already exist" });
     }
 
     const password_hash = await generatePassword(password.trim());
@@ -116,7 +120,7 @@ router.post('/', async (req: Request, res: Response) => {
         email: email.trim(),
         firstname: firstname,
         surname: surname,
-        number: number,
+        number: number.trim(),
         password_hash: password_hash
     });
 
@@ -130,7 +134,8 @@ router.post('/', async (req: Request, res: Response) => {
     // Generate JWT
     const jwt = generateJWT(savedUser);
     console.log("TOKEN " + jwt);
-    res.status(201).send({token: jwt, error: ""});
+    const userJustSaved = await User.findOne({where: { email: email.trim() }});
+    res.status(201).send({userId: userJustSaved.id, token: jwt, error: ""});
 });
 
 router.get('/', async (req: Request, res: Response) => {

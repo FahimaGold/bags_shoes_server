@@ -1,5 +1,8 @@
   
-import {Table, Column, Model, HasMany, PrimaryKey, DataType} from 'sequelize-typescript';
+import {Table, Column, Model, PrimaryKey, DataType, AutoIncrement, BelongsToMany} from 'sequelize-typescript';
+
+import {User} from '../../users/models/User'; 
+import {Cart} from '../../cart/models/Cart'; 
 
 @Table
 export class Product extends Model<Product> {
@@ -21,6 +24,11 @@ export class Product extends Model<Product> {
 
     @Column(DataType.STRING)
     public category!: string;
+
+    @BelongsToMany(() => User, () => Cart)
+    users: User[];
+
+   
 }
 
  

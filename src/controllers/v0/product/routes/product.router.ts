@@ -1,12 +1,12 @@
 import { Router, Request, Response } from 'express';
 import { Product } from '../models/Product';
-
+import { requireAuth } from '../../users/routes/auth.router';
 const router: Router = Router();
 
 //Get All products
 
-router.get('/', async(req: Request, res: Response)=>  {
-    const items = await Product.findAndCountAll({order: [['id','ASC']]});
+router.get('/',requireAuth, async(req: Request, res: Response)=>  {
+    const items = await Product.findAndCountAll({order: [['id','DESC']]});
     items.rows.map((item) => {
         if(item.imgUrl){
             //Getting the product Url
