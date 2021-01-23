@@ -23,6 +23,8 @@ export class User extends Model<User> {
 
   @BelongsToMany(() => Product, () => Cart)
     products: Product[];
+ 
+ 
 
   short() {
     return {
