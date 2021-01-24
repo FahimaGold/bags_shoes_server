@@ -52,9 +52,12 @@ router.post('/add', requireAuth, async(req: Request, res: Response)=>  {
 //Deleting a product from Cart
 router.delete('/remove', async(req: Request, res: Response)=> {
     let {user_id, product_id} = req.query;
+    if(!user_id || !product_id){
+        return res.status(400).send(`id is required`); 
+    }
     console.log("delete from cart " + user_id +" Product " + product_id);
     await Cart.destroy({where:{userId:user_id, productId: product_id}});
-
+    res.status(200).send({response:  "Product " + product_id  + " removed from Cart!"});
 
 });
 
