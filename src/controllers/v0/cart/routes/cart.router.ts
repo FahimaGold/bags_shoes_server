@@ -40,7 +40,9 @@ router.post('/add', requireAuth, async(req: Request, res: Response)=>  {
     console.log("userId==> " + userId + "---ProductId==> " + productId);
 
     //Checking if product is already in Cart
-    const checkElem = await Cart.findOne({where: { userId: userId, productId: productId }});
+    const checkElem = await Cart.findOne({where: { userId: userId, 
+                                                 productId: productId }
+                                                });
     if(checkElem){
        return res.status(200).send({response:  "Product " + productId  + " is already in cart!"});
     }
