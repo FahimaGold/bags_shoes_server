@@ -60,7 +60,6 @@ POSTGRESS_USERNAME=your_db_username
 POSTGRESS_PASSWORD=your_db_password
 POSTGRESS_DATABASE=your_database_name
 POSTGRESS_HOST=localhost
-JWT=your_jwt_secret
 ```
 
 ### 4. Start the development server
